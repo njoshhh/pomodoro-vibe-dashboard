@@ -14,8 +14,8 @@ const tracks = [
 const trackVideoIds = [
   "jfKfPfyJRdk",
   "4xDzrJKXOOY",
-  "5qap5aO4i9A",
-  "DWcJFNfaw9c"
+  "zzu5bPR2aWE",
+  "n61ULEU7CO0"
 ];
 
 export default function Home() {
@@ -23,17 +23,24 @@ export default function Home() {
   const [isPlaying, setIsPlaying] = useState(true);
 
   const goToPrevTrack = () => {
+    setIsPlaying(true);
     setCurrentVideoIndex((prev) =>
       (prev - 1 + trackVideoIds.length) % trackVideoIds.length
     );
   };
 
   const goToNextTrack = () => {
+    setIsPlaying(true);
     setCurrentVideoIndex((prev) => (prev + 1) % trackVideoIds.length);
   };
 
   const togglePlayPause = () => {
     setIsPlaying((prev) => !prev);
+  };
+
+  const selectTrack = (index: number) => {
+    setCurrentVideoIndex(index);
+    setIsPlaying(true);
   };
 
   return (
@@ -82,14 +89,25 @@ export default function Home() {
             </div>
           </div>
           <ul className="mt-5 space-y-2">
-            {tracks.map((track) => (
-              <li
-                key={track}
-                className="rounded-lg border border-transparent px-3 py-2 text-sm text-[#d8dee9]/80 transition hover:border-[#4c566a] hover:bg-[#2e3440]/70"
-              >
-                {track}
-              </li>
-            ))}
+            {tracks.map((track, index) => {
+              const isActive = index === currentVideoIndex;
+
+              return (
+                <li key={track}>
+                  <button
+                    type="button"
+                    onClick={() => selectTrack(index)}
+                    className={`w-full rounded-lg border px-3 py-2 text-left text-sm transition ${
+                      isActive
+                        ? "border-[#81a1c1] bg-[#2e3440] text-[#88c0d0]"
+                        : "border-transparent text-[#d8dee9]/80 hover:border-[#4c566a] hover:bg-[#2e3440]/70"
+                    }`}
+                  >
+                    {track}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </section>
 
